@@ -1,0 +1,32 @@
+I will be placing the tables in an excel sheet.
+Summary:Runtime is increasing with the size of the array and number of threads.
+increasing the number of threads may lead to improved performance, but it's not always a linear relationship. There can be overhead associated with managing threads, and if the computation is not well-suited for parallelization, the additional threads might not provide significant speedup.
+
+The observed improvement in runtime across the iterations of the problem can be attributed to the optimization techniques applied to address cache-related issues. Let's summarize why each iteration might be faster than the previous one:
+
+Baseline Version:
+The initial version likely suffered from cache-related issues, such as false sharing.
+Multiple threads updating a shared count variable could lead to cache line invalidations, causing contention and reducing performance.
+Lack of cache-aware data structures and alignment may result in inefficient cache usage.
+
+Mutex Version:
+The introduction of a mutex aimed to address race conditions and ensure mutual exclusion during updates to the shared count variable.
+However, the use of a mutex introduces contention, as only one thread can access the critical section at a time.
+Contention can lead to thread contention and increased synchronization overhead, potentially limiting scalability.
+
+Private Variables (Aligned Version):
+The use of private variables with cache line alignment minimizes false sharing.
+Each thread's private count and padding are placed in separate cache lines, reducing contention.
+Avoiding the use of a mutex can lead to better scalability and reduced synchronization overhead.
+
+Improved Cache Line Alignment:
+Further optimization was introduced by aligning the ThreadData struct to the cache line size.
+Aligning data structures to cache lines reduces false sharing and minimizes cache line invalidations.
+Improved cache utilization enhances data locality, reducing the time spent accessing main memory.
+
+Overall Summary:
+You can see the runtimes in the excel sheets.
+The performance improvement observed across iterations can be attributed to addressing cache-related issues.
+False sharing was mitigated by aligning data structures to cache lines, preventing unnecessary cache line invalidations.
+Optimizing cache usage enhances data locality, reducing the time spent accessing slower main memory.
+The final version benefits from better scalability, reduced contention, and improved cache efficiency, resulting in faster execution times.
